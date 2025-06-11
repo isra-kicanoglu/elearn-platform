@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% block title %}Student Dashboard{% endblock %}
+
+{% block content %}
+<h2 class="mb-4 text-center">📚 My Courses</h2>
+
+{% if data %}
+  <div class="row">
+    {% for item in data %}
+      <div class="col-md-6 col-lg-4 mb-4">
+        <div class="card h-100 shadow-sm">
+          <div class="card-body">
+            <h5 class="card-title">{{ item.course.title }}</h5>
+            <p class="card-text">Progress: {{ item.progress }}%</p>
+
+            <div class="progress mb-3">
+              <div class="progress-bar bg-success" role="progressbar" style="width: {{ item.progress }}%;" aria-valuenow="{{ item.progress }}" aria-valuemin="0" aria-valuemax="100">
+                {{ item.progress }}%
+              </div>
+            </div>
+
+            <a href="/course/{{ item.course.id }}/" class="btn btn-primary btn-sm me-2">🔍 View Course</a>
+            <a href="/grades/" class="btn btn-outline-secondary btn-sm">📊 View Grades</a>
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+{% else %}
+  <div class="alert alert-info text-center">
+    You’re not enrolled in any courses yet.
+  </div>
+{% endif %}
+
+<div class="text-center mt-4">
+  <a href="/" class="btn btn-link">← Back to Home</a>
+</div>
+{% endblock %}

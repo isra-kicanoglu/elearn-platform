@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block title %}Instructor Dashboard{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+  <h2 class="mb-4 text-center">🧑‍🏫 Instructor Dashboard</h2>
+
+  {% if course_data %}
+    <div class="row row-cols-1 row-cols-md-2 g-4">
+      {% for item in course_data %}
+        <div class="col">
+          <div class="card h-100 shadow-sm">
+            <div class="card-body">
+              <h5 class="card-title">{{ item.course.title }}</h5>
+              <p class="card-text">
+                👥 Enrolled Students: <strong>{{ item.student_count }}</strong><br>
+                ⭐ Average Rating: <strong>{{ item.avg_rating|default:"N/A" }}</strong>
+              </p>
+              <div class="d-grid gap-2">
+                <a href="/course/{{ item.course.id }}/" class="btn btn-primary btn-sm">🔍 View Course</a>
+                <a href="/course/{{ item.course.id }}/students/" class="btn btn-outline-secondary btn-sm">👥 View Students</a>
+                <a href="/edit-course/{{ item.course.id }}/" class="btn btn-outline-dark btn-sm">✏️ Edit Course</a>
+                <a href="/add-lesson/" class="btn btn-outline-info btn-sm">📚 Add Lesson</a>
+                <a href="/add-assignment/" class="btn btn-outline-warning btn-sm">📤 Add Assignment</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  {% else %}
+    <div class="alert alert-info text-center">You haven’t created any courses yet.</div>
+  {% endif %}
+
+  <div class="mt-4 text-center">
+    <a href="/" class="btn btn-link">← Back to Home</a>
+  </div>
+</div>
+{% endblock %}

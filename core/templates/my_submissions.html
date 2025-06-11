@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block title %}My Submissions{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+  <h2 class="mb-4">📁 My Submissions</h2>
+
+  {% if submissions %}
+    <ul class="list-group mb-4">
+      {% for sub in submissions %}
+        <li class="list-group-item">
+          <h5 class="mb-1">📚 <strong>{{ sub.assignment.course.title }}</strong></h5>
+          <p class="mb-1">
+            📝 <strong>Assignment:</strong> {{ sub.assignment.title }}<br>
+            📅 <strong>Submitted:</strong> {{ sub.submitted_at|date:"M d, Y H:i" }}<br>
+            📎 <a href="{{ sub.file_url.url }}" class="link-primary">Download File</a>
+          </p>
+        </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <div class="alert alert-info">You haven’t submitted anything yet.</div>
+  {% endif %}
+
+  <a href="/" class="btn btn-link">← Back to Courses</a>
+</div>
+{% endblock %}

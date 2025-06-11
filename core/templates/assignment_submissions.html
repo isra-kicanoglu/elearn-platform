@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block title %}Submissions - {{ assignment.title }}{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+  <h2 class="mb-4">📥 Submissions for: <em>{{ assignment.title }}</em></h2>
+
+  {% if submissions %}
+    <ul class="list-group mb-4">
+      {% for sub in submissions %}
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+          <div>
+            <strong>{{ sub.student.username }}</strong>
+          </div>
+          <div>
+            <a href="{{ sub.file_url.url }}" class="btn btn-sm btn-outline-primary" target="_blank">📎 Download</a>
+            <a href="/grade-submissions/{{ sub.id }}/" class="btn btn-sm btn-outline-success">📝 Grade</a>
+          </div>
+        </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <div class="alert alert-info">No submissions for this assignment yet.</div>
+  {% endif %}
+
+  <div class="text-center mt-4">
+    <a href="/course/{{ assignment.course.id }}/" class="btn btn-link">← Back to Course</a>
+  </div>
+</div>
+{% endblock %}

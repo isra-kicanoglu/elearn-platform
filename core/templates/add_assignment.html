@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% load form_tags %}
+
+{% block title %}Add Assignment{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+  <div class="card shadow">
+    <div class="card-header bg-warning text-dark text-center">
+      <h4 class="mb-0">📝 Add New Assignment</h4>
+    </div>
+    <div class="card-body">
+      <form method="POST">
+        {% csrf_token %}
+
+        <div class="mb-3">
+          {{ form.course.label_tag }}
+          {{ form.course|add_class:"form-control" }}
+        </div>
+
+        <div class="mb-3">
+          {{ form.title.label_tag }}
+          {{ form.title|add_class:"form-control" }}
+        </div>
+
+        <div class="mb-3">
+          {{ form.description.label_tag }}
+          {{ form.description|add_class:"form-control" }}
+        </div>
+
+        <div class="mb-3">
+          {{ form.due_date.label_tag }}
+          {{ form.due_date|add_class:"form-control" }}
+        </div>
+
+        <button type="submit" class="btn btn-warning w-100 fw-bold">📤 Create Assignment</button>
+      </form>
+
+      <div class="mt-3 text-center">
+        <a href="/" class="btn btn-link">← Back to Courses</a>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,22 @@
+[
+{
+  "model": "core.user",
+  "pk": 1,
+  "fields": {
+    "password": "pbkdf2_sha256$1000000$HWx2TBiX8CqAQIPM5Vzj63$HwTYwsA9FvVWaL07Tic9Dtw56IwOY8XA6pt/E+7vNHU=",
+    "last_login": null,
+    "is_superuser": true,
+    "username": "abood",
+    "first_name": "",
+    "last_name": "",
+    "email": "abdlrhmanbdr@icloud.com",
+    "is_staff": true,
+    "is_active": true,
+    "date_joined": "2025-06-07T19:59:39.721Z",
+    "role": "",
+    "is_approved": false,
+    "groups": [],
+    "user_permissions": []
+  }
+}
+]

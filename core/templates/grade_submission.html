@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% load form_tags %}
+
+{% block title %}Grade Submission{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+  <h2 class="mb-4">📝 Grade Submission</h2>
+
+  <div class="card mb-4 shadow-sm">
+    <div class="card-body">
+      <p><strong>👤 Student:</strong> {{ submission.student.username }}</p>
+      <p><strong>📄 Assignment:</strong> {{ submission.assignment.title }}</p>
+      <p>
+        <a href="{{ submission.file_url.url }}" class="btn btn-outline-primary btn-sm" target="_blank">
+          📎 View Submitted File
+        </a>
+      </p>
+    </div>
+  </div>
+
+  <div class="card shadow-sm">
+    <div class="card-body">
+      <form method="POST">
+        {% csrf_token %}
+        <div class="mb-3">
+          {{ form.marks.label_tag }}
+          {{ form.marks|add_class:"form-control" }}
+        </div>
+        <div class="mb-3">
+          {{ form.feedback.label_tag }}
+          {{ form.feedback|add_class:"form-control" }}
+        </div>
+        <button type="submit" class="btn btn-success">✅ Submit Grade</button>
+      </form>
+    </div>
+  </div>
+
+  <div class="mt-4 text-center">
+    <a href="/grade-submissions/" class="btn btn-link">← Back to Submissions</a>
+  </div>
+</div>
+{% endblock %}

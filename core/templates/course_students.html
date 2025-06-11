@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% block title %}Students in {{ course.title }}{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+  <h2 class="mb-4">👥 Students in <em>{{ course.title }}</em></h2>
+
+  {% if enrollments %}
+    <ul class="list-group mb-4">
+      {% for enrollment in enrollments %}
+        <li class="list-group-item">
+          👤 {{ enrollment.student.username }}
+        </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <div class="alert alert-warning">No students enrolled in this course yet.</div>
+  {% endif %}
+
+  <a href="/instructor-dashboard/" class="btn btn-outline-secondary">← Back to Dashboard</a>
+</div>
+{% endblock %}

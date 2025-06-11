@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% load form_tags %}
+{% block title %}Edit Lesson: {{ lesson.title }}{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+  <h2 class="mb-4">✏️ Edit Lesson: <em>{{ lesson.title }}</em></h2>
+
+  <form method="POST" class="mb-4">
+    {% csrf_token %}
+    <div class="mb-3">
+      {{ form.title.label_tag }}
+      {{ form.title|add_class:"form-control" }}
+    </div>
+    <div class="mb-3">
+      {{ form.content.label_tag }}
+      {{ form.content|add_class:"form-control" }}
+    </div>
+    <div class="mb-3">
+      {{ form.video_url.label_tag }}
+      {{ form.video_url|add_class:"form-control" }}
+    </div>
+    <button type="submit" class="btn btn-primary">💾 Save Changes</button>
+  </form>
+
+  <a href="/course/{{ lesson.course.id }}/" class="btn btn-outline-secondary">← Back to Course</a>
+</div>
+{% endblock %}

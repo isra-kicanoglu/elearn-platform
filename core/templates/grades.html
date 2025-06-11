@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block title %}Your Grades{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+  <h2 class="mb-4">📊 Your Grades</h2>
+
+  {% if grades %}
+    <ul class="list-group mb-4">
+      {% for grade in grades %}
+        <li class="list-group-item">
+          <strong>📝 Assignment:</strong> {{ grade.submission.assignment.title }}<br>
+          <strong>🎯 Marks:</strong> {{ grade.marks }}<br>
+          <strong>💬 Feedback:</strong> {{ grade.feedback|default:"No feedback yet." }}
+        </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <div class="alert alert-info">No grades available yet.</div>
+  {% endif %}
+
+  <a href="/" class="btn btn-link">← Back to Courses</a>
+</div>
+{% endblock %}

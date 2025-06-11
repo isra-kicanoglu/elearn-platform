@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% load form_tags %}
+
+{% block title %}Add Lesson{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+  <div class="card shadow">
+    <div class="card-header bg-info text-white text-center">
+      <h4 class="mb-0">📚 Add a New Lesson</h4>
+    </div>
+    <div class="card-body">
+      <form method="POST">
+        {% csrf_token %}
+
+        <div class="mb-3">
+          {{ form.course.label_tag }}
+          {{ form.course|add_class:"form-control" }}
+        </div>
+
+        <div class="mb-3">
+          {{ form.title.label_tag }}
+          {{ form.title|add_class:"form-control" }}
+        </div>
+
+        <div class="mb-3">
+          {{ form.content.label_tag }}
+          {{ form.content|add_class:"form-control" }}
+        </div>
+
+        <div class="mb-3">
+          {{ form.video_url.label_tag }}
+          {{ form.video_url|add_class:"form-control" }}
+        </div>
+
+        <button type="submit" class="btn btn-success w-100 fw-bold">➕ Add Lesson</button>
+      </form>
+
+      <div class="mt-3 text-center">
+        <a href="/" class="btn btn-link">← Back to Courses</a>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

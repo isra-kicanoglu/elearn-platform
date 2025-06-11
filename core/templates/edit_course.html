@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% load form_tags %}
+{% block title %}Edit Course: {{ course.title }}{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+  <h2 class="mb-4">✏️ Edit Course: <em>{{ course.title }}</em></h2>
+
+  <form method="POST" enctype="multipart/form-data" class="mb-4">
+    {% csrf_token %}
+    <div class="mb-3">
+      {{ form.title.label_tag }}
+      {{ form.title|add_class:"form-control" }}
+    </div>
+    <div class="mb-3">
+      {{ form.description.label_tag }}
+      {{ form.description|add_class:"form-control" }}
+    </div>
+    <div class="mb-3">
+      {{ form.image.label_tag }}
+      {{ form.image|add_class:"form-control" }}
+    </div>
+    <button type="submit" class="btn btn-primary">💾 Save Changes</button>
+  </form>
+
+  <a href="/" class="btn btn-outline-secondary">← Back to Courses</a>
+</div>
+{% endblock %}

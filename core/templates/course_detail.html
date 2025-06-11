@@ -1,0 +1,154 @@
+{% extends 'base.html' %}
+{% load form_tags %}
+
+{% block title %}{{ course.title }}{% endblock %}
+
+{% block content %}
+<div class="container">
+  <h2 class="mb-3">{{ course.title }}</h2>
+  <p class="lead">{{ course.description }}</p>
+
+  {% if user.is_authenticated and user.role == 'student' %}
+    {% if not is_enrolled %}
+      <form method="POST" action="/enroll/{{ course.id }}/">
+        {% csrf_token %}
+        <button class="btn btn-success mb-3">📥 Enroll in this Course</button>
+      </form>
+    {% else %}
+      <div class="alert alert-success">✅ You are enrolled in this course</div>
+    {% endif %}
+  {% endif %}
+
+  {% if user.role == 'student' %}
+    <div class="mb-4">
+      <strong>Progress:</strong> {{ completed_count }} / {{ total_lessons }} lessons completed ({{ progress_percent }}%)
+      <div class="progress mt-2">
+        <div class="progress-bar" role="progressbar"
+     style="width: {{ progress_percent }}%;"
+     aria-valuenow="{{ progress_percent }}" aria-valuemin="0" aria-valuemax="100">
+  {{ progress_percent }}%
+</div>
+
+      </div>
+    </div>
+  {% endif %}
+
+  <h4 class="mt-4">📘 Lessons</h4>
+  <ul class="list-group mb-4">
+    {% for lesson in lessons %}
+      <li class="list-group-item d-flex justify-content-between align-items-center">
+        <span>
+          {% if lesson.id in completed_lessons %}✅{% else %}⬜{% endif %}
+          <a href="/lesson/{{ lesson.id }}/">{{ lesson.title }}</a>
+        </span>
+        {% if user.role == 'instructor' and user == course.instructor %}
+          <span>
+            <a href="/edit-lesson/{{ lesson.id }}/" class="btn btn-sm btn-outline-secondary">✏️</a>
+            <a href="/delete-lesson/{{ lesson.id }}/" class="btn btn-sm btn-outline-danger" onclick="return confirm('Are you sure?')">🗑️</a>
+          </span>
+        {% endif %}
+      </li>
+    {% empty %}
+      <li class="list-group-item">No lessons yet.</li>
+    {% endfor %}
+  </ul>
+
+  <h4 class="mt-4">📝 Assignments</h4>
+  <ul class="list-group mb-4">
+    {% for assignment in assignments %}
+      <li class="list-group-item d-flex justify-content-between">
+        <span>{{ assignment.title }} — <small>Due: {{ assignment.due_date }}</small></span>
+        <span>
+        {% if user.is_authenticated and user.role == 'student' %}
+          <a href="/assignment/{{ assignment.id }}/upload/" class="btn btn-sm btn-outline-primary">Upload</a>
+        {% elif user.is_authenticated and user.role == 'instructor' and course.instructor.id == user.id %}
+          <a href="/course/{{ course.id }}/assignment/{{ assignment.id }}/submissions/" class="btn btn-sm btn-outline-primary">📥 View</a>
+          <a href="/edit-assignment/{{ assignment.id }}/" class="btn btn-sm btn-outline-secondary">✏️</a>
+          <a href="/delete-assignment/{{ assignment.id }}/" class="btn btn-sm btn-outline-danger" onclick="return confirm('Are you sure?')">🗑️</a>
+        {% endif %}
+        </span>
+      </li>
+    {% empty %}
+      <li class="list-group-item">No assignments found.</li>
+    {% endfor %}
+  </ul>
+
+  {% if user.role == 'student' and is_enrolled %}
+    {% if completed_count == total_lessons and assignments|length == submissions_count %}
+      <a href="/certificate/{{ course.id }}/" target="_blank" class="btn btn-outline-success mb-4">🎓 Download Certificate</a>
+    {% endif %}
+  {% endif %}
+
+  <hr class="my-5">
+  <h4 class="mb-3">💬 Discussions</h4>
+
+  {% if user.is_authenticated %}
+    <form method="POST" class="mb-3">
+      {% csrf_token %}
+      <div class="mb-3">
+        {{ form.message.label_tag }}
+        {{ form.message|add_class:"form-control" }}
+      </div>
+      <button type="submit" class="btn btn-secondary">💬 Post</button>
+    </form>
+  {% else %}
+    <p><a href="/login/">Log in</a> to post a comment.</p>
+  {% endif %}
+
+  <ul class="list-group mb-4">
+    {% for d in discussions %}
+      <li class="list-group-item">
+        <div class="d-flex justify-content-between">
+          <strong>{{ d.user.username }}</strong>
+          <small class="text-muted">{{ d.posted_at|date:"M d, H:i" }}</small>
+        </div>
+        <div>{{ d.message }}</div>
+      </li>
+    {% empty %}
+      <li class="list-group-item">No comments yet.</li>
+    {% endfor %}
+  </ul>
+
+  <hr class="my-5">
+  <h4 class="mb-3">⭐ Course Ratings</h4>
+
+  {% if avg_rating %}
+    <p><strong>Average Rating:</strong> {{ avg_rating }}/5</p>
+  {% else %}
+    <p class="text-muted">No ratings yet.</p>
+  {% endif %}
+
+  {% if user.is_authenticated and user.role == 'student' and course.instructor != user %}
+    {% if existing_rating %}
+      <p><strong>Your Rating:</strong> {{ existing_rating.rating }}★</p>
+    {% endif %}
+    <form method="POST" class="mb-3">
+      {% csrf_token %}
+      <div class="mb-3">
+        {{ rating_form.rating.label_tag }}
+        {{ rating_form.rating }}
+      </div>
+      <div class="mb-3">
+        {{ rating_form.feedback.label_tag }}
+        {{ rating_form.feedback|add_class:"form-control" }}
+      </div>
+      <button type="submit" class="btn btn-warning">Submit Rating</button>
+    </form>
+  {% elif not user.is_authenticated %}
+    <p><a href="/login/">Log in</a> to rate this course.</p>
+  {% endif %}
+
+  <ul class="list-group mb-4">
+    {% for r in all_ratings %}
+      <li class="list-group-item">
+        <strong>{{ r.user.username }}</strong> — {{ r.rating }}★<br>
+        {{ r.feedback|default:"No comment" }}
+      </li>
+    {% empty %}
+      <li class="list-group-item">No reviews yet.</li>
+    {% endfor %}
+  </ul>
+
+  <a href="/" class="btn btn-link">← Back to All Courses</a>
+</div>
+{% endblock %}
